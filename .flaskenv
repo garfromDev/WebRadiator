@@ -1,0 +1,1 @@
+FLASk_APP=web_radiator.py
