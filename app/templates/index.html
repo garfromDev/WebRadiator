@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }} - Radiator</title>
+</head>
+<body>
+<h1>Temperature {% if radiator.connected %}
+    {{ radiator.temperature }}
+    {% else %}
+    Non connecté
+    {% endif %}</h1>
+{% for post in posts %}
+<div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
+{% endfor %}
+</body>
+</html>
