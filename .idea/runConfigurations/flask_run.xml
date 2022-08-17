@@ -13,6 +13,7 @@
     <option name="EXECUTE_SCRIPT_FILE" value="false" />
     <envs>
       <env name="FLASK_ENV" value="development" />
+      <env name="SECRET_KEY" value="maclefsecrete" />
     </envs>
     <method v="2" />
   </configuration>
