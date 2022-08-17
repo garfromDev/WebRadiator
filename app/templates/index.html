@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ title }} - Radiator</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block content %}
 <h1>Temperature {% if radiator.connected %}
     {{ radiator.temperature }}
     {% else %}
@@ -13,5 +9,5 @@
 {% for post in posts %}
 <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
 {% endfor %}
-</body>
-</html>
+
+{% endblock %}
