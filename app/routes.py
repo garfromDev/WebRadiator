@@ -2,6 +2,9 @@ from app import app
 from flask import render_template
 import random
 
+from app.forms import LoginForm
+
+
 class Radiator:
     @property
     def temperature(self):
@@ -28,3 +31,9 @@ posts = [
 def main_page():
     radiator = Radiator()
     return render_template('index.html', title='Radiator', radiator=radiator, posts=posts)
+
+@app.route("/login", method=["GET", "POST"])
+def login():
+    form = LoginForm()
+
+    return render_template("login.html", title="Login", form=form)
