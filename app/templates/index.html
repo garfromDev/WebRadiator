@@ -1,11 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Temperature {% if radiator.connected %}
-    {{ radiator.temperature }}
-    {% else %}
-    Non connecté
-    {% endif %}</h1>
+<h1>Temperature
+    {{ radiator.temperature() }}
+ </h1>
 {% for post in posts %}
 <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
 {% endfor %}
