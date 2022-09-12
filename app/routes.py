@@ -3,7 +3,7 @@ from flask import render_template
 import random
 
 from app.forms import LoginForm
-
+from InsideCondition import InsideCondition
 
 class Radiator:
     @property
@@ -29,10 +29,10 @@ posts = [
 
 @app.route('/')
 def main_page():
-    radiator = Radiator()
+    radiator = InsideCondition.shared()
     return render_template('index.html', title='Radiator', radiator=radiator, posts=posts)
 
-@app.route("/login", method=["GET", "POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
 
