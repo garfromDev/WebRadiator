@@ -1,6 +1,13 @@
 # WebRadiator
 Interface web pour radiator
 
+
+## CONFIGURATION
+- SECRET_KEY : pour 
+- RADIATOR_TEST_ENVIRONMENT : True pour éviter les accès au harware
+- SQLALCHEMY_DATABASE_URI : path du fichier contenant la base SQLLite
+
+## Installation
 venev activé dans le terminal de Pycharm, sinon
 activation de l'environnement : source ~/workspace/venv/WebRadiator/bin/activate
 
