@@ -30,16 +30,19 @@ class OverMode(Enum):
 
 class UserInteraction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    overruled_status = db.Column(db.Boolean(), default=False)
-    overruled_exp_date = db.Column(db.DateTime())
+    overruled_status = db.Column(db.Boolean, default=False)
+    overruled_exp_date = db.Column(db.DateTime)
     overruled = db.composite(DatedStatus, overruled_status, overruled_exp_date)
     overmode_status = db.Column(db.Enum(OverMode), default=OverMode.UNKNOWN)
-    overmode_exp_date = db.Column(db.Datetime())
+    overmode_exp_date = db.Column(db.DateTime)
     overmode = db.composite(DatedStatus, overmode_status, overmode_exp_date)
-    userbonus_status = db.Column(db.Boolean(), default=False)
-    userbonus_exp_date = db.Column(db.Datetime())
+    userbonus_status = db.Column(db.Boolean, default=False)
+    userbonus_exp_date = db.Column(db.DateTime)
     userbonus = db.composite(DatedStatus, userbonus_status, userbonus_exp_date)
-    userdown_status = db.Column(db.Boolean(), default=False)
-    userdown_exp_date = db.Column(db.Datetime())
+    userdown_status = db.Column(db.Boolean, default=False)
+    userdown_exp_date = db.Column(db.DateTime)
     userdown = db.composite(DatedStatus, userdown_status, userdown_exp_date)
-    targettemp = db.Column(db.Float())  # TODO ajouter CST.DEFAULT_TARGET_TEMP ?
+    targettemp = db.Column(db.Float)  # TODO ajouter CST.DEFAULT_TARGET_TEMP ?
+
+    def __repr__(self):
+        return self.__dict__
