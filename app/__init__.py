@@ -16,10 +16,8 @@ print("test :", app.config['RADIATOR_TEST_ENVIRONMENT'])
 print("secret :", app.config['SECRET_KEY'])
 os.environ["RADIATOR_TEST_ENVIRONMENT"] = str(app.config['RADIATOR_TEST_ENVIRONMENT'])
 print("test", os.environ.get("RADIATOR_TEST_ENVIRONMENT"))
-sys.path.append('/Users/alistef/Documents/Programmation/Rasberry/Radiator/')
-from  main import start_radiator
+from  Radiator.main import start_radiator
 print("staring radiator")
-os.chdir('/Users/alistef/Documents/Programmation/Rasberry/Radiator/')
 start_radiator()
 
 from app import routes, models

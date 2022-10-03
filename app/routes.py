@@ -3,7 +3,7 @@ from flask import render_template, redirect, flash
 import random
 
 from app.forms import LoginForm
-from InsideCondition import InsideCondition
+from Radiator.InsideCondition import InsideCondition
 
 class Radiator:
     @property
@@ -34,7 +34,7 @@ def main_page():
 
 
 @app.route("/login", methods=["GET", "POST"])
-def login_post():
+def login():
     # TODO login
     form = LoginForm()
     if form.validate_on_submit():
