@@ -3,3 +3,4 @@ python-dotenv>=0.2
 flask-wtf==1.0.1
 flask-sqlalchemy
 flask-migrate
+flask-login
