@@ -1,1 +1,1 @@
-FLASk_APP=web_radiator.py
+FLASK_APP=web_radiator.py
