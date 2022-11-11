@@ -2,12 +2,14 @@ from flask import Flask
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_login import LoginManager
 import os
 import sys
 # the mock-0.3.1 dir contains testcase.py, testutils.py & mock.py
 # at this point, ENV doesn't contain ENV variables declared in Pycharm settings
 
 app = Flask(__name__)
+login = LoginManager(app)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)  # pour le suivi des migrations de la base
