@@ -10,6 +10,7 @@ import sys
 
 app = Flask(__name__)
 login = LoginManager(app)
+login.login_view = 'login'  # so flask know how to log users
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)  # pour le suivi des migrations de la base
