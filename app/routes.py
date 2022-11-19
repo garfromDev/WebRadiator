@@ -5,7 +5,7 @@ from werkzeug.urls import url_parse
 import random
 from .models import User
 
-from app.forms import LoginForm
+from app.forms import LoginForm, RadiatorForm
 from Radiator.InsideCondition import InsideCondition
 
 
@@ -35,7 +35,10 @@ posts = [
 @login_required
 def main_page():
     radiator = InsideCondition.shared()
-    return render_template('index.html', title='Radiator', radiator=radiator, posts=posts)
+    form = RadiatorForm()
+    if form.validate_on_submit():
+        pass
+    return render_template('index.html', title='Radiator', radiator=radiator, form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])
