@@ -5,6 +5,7 @@
     {{ radiator.temperature() }}
  </h1>
 <div>
+    <a href="{{ url_for('mode', heating_mode='eco') }}">Eco</a>
     Mode : {{form.confort}} {{form.eco}} {{form.off}}
 </div>
 <div>

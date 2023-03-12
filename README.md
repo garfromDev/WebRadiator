@@ -24,3 +24,6 @@ userinteraction.json pour donner les ordre, mais qui du FTP -> débrancher le FT
 autre solution : intégrer le flask et le programme raspberry, à voir si ça marche
 
 Pour développer le flask, on va imaginer un objet Radiator qui expose une interface, on verra après comment il agit
+
+
+POur la phase de test, user stephane mdp chat
