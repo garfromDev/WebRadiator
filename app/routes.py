@@ -7,6 +7,7 @@ from .models import User
 
 from app.forms import LoginForm, RadiatorForm
 from Radiator.InsideCondition import InsideCondition
+from Radiator.main import decider
 
 
 class Radiator:
@@ -37,7 +38,9 @@ def main_page():
     radiator = InsideCondition.shared()
     form = RadiatorForm()
     if form.validate_on_submit():
-        pass
+        if form.eco.data:
+            print("=== eco mode")
+            decider._heater._setEcoMode()
     return render_template('index.html', title='Radiator', radiator=radiator, form=form)
 
 
@@ -63,4 +66,11 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
+    return redirect(url_for('main_page'))
+
+
+@app.route('/mode/<heating_mode>')
+@login_required
+def mode(heating_mode):
+    print("=== choosen heating mode : %s" % heating_mode)
     return redirect(url_for('main_page'))
