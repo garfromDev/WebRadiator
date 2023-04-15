@@ -1,13 +1,15 @@
 from app import db, login
-from datetime import datetime
+from datetime import datetime, timedelta
+from typing import Optional
 from enum import Enum
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class DatedStatus:
-    def __init__(self, status: bool, expiration_date: datetime = datetime(2021, 1, 1)):
+    def __init__(self, status: bool, expiration_date: Optional[datetime] = None):
+        """ Par défaut, lesq statuts expirent le jour même à minuit"""
         self.status = status
-        self.expiration_date = expiration_date
+        self.expiration_date = expiration_date or datetime.today().replace(hour=23, minute=59, second=0)
 
     def __composite_values__(self):
         return self.status, self.expiration_date
@@ -68,3 +70,4 @@ class User(db.Model, UserMixin):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+

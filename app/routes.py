@@ -3,7 +3,7 @@ from flask import render_template, redirect, flash, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 import random
-from .models import User
+from .models import User, UserInteraction
 
 from app.forms import LoginForm, RadiatorForm
 from Radiator.InsideCondition import InsideCondition
@@ -73,4 +73,7 @@ def logout():
 @login_required
 def mode(heating_mode):
     print("=== choosen heating mode : %s" % heating_mode)
+    if mode == "eco":
+        # écrire en base un userInteraction
+        usi = UserInteraction()
     return redirect(url_for('main_page'))
