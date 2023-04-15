@@ -6,7 +6,9 @@
  </h1>
 <div>
     <a href="{{ url_for('mode', heating_mode='eco') }}">Eco</a>
-    Mode : {{form.confort}} {{form.eco}} {{form.off}}
+    <a href="{{ url_for('mode', heating_mode='confort') }}">Confort +</a>
+    <a href="{{ url_for('mode', heating_mode='minus1') }}">Confort</a>
+    <a href="{{ url_for('mode', heating_mode='minus2') }}">Confort -</a>
 </div>
 <div>
     {{form.more_heat}} {{form.less_heat}}
