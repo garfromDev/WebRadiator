@@ -1,13 +1,15 @@
 from app import db, login
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Optional
+from dataclasses import dataclass
 from enum import Enum
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 class DatedStatus:
-    def __init__(self, status: bool, expiration_date: Optional[datetime] = None):
-        """ Par défaut, lesq statuts expirent le jour même à minuit"""
+    def __init__(self, status: bool = True, expiration_date: Optional[datetime] = None):
+        """ Par défaut, les statuts expirent le jour même à minuit et sont actifs """
         self.status = status
         self.expiration_date = expiration_date or datetime.today().replace(hour=23, minute=59, second=0)
 
@@ -32,14 +34,19 @@ class OverMode(Enum):
     UNKNOWN = "UNKNOWN"
 
 
+@dataclass
+class OverruledStatus:
+    status: DatedStatus
+    overMode: OverMode = OverMode.UNKNOWN
+
+
 class UserInteraction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     overruled_status = db.Column(db.Boolean, default=False)
     overruled_exp_date = db.Column(db.DateTime, default=datetime(2021, 1, 1))
     overruled = db.composite(DatedStatus, overruled_status, overruled_exp_date)
     overmode_status = db.Column(db.Enum(OverMode), default=OverMode.UNKNOWN)
-    overmode_exp_date = db.Column(db.DateTime, default=datetime(2021, 1, 1))
-    overmode = db.composite(DatedStatus, overmode_status, overmode_exp_date)
+    overmode = db.composite(OverruledStatus, overruled_status, overruled_exp_date, overmode_status)
     userbonus_status = db.Column(db.Boolean, default=False)
     userbonus_exp_date = db.Column(db.DateTime, default=datetime(2021, 1, 1))
     userbonus = db.composite(DatedStatus, userbonus_status, userbonus_exp_date)
@@ -68,6 +75,5 @@ class User(db.Model, UserMixin):
 
 
 @login.user_loader
-def load_user(id):
-    return User.query.get(int(id))
-
+def load_user(uid):
+    return User.query.get(int(uid))

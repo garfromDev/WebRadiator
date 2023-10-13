@@ -4,3 +4,4 @@ flask-wtf==1.0.1
 flask-sqlalchemy
 flask-migrate
 flask-login
+werkzeug
