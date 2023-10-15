@@ -6,6 +6,7 @@ import random
 from .models import User, UserInteraction, OverMode, DatedStatus
 
 from app.forms import LoginForm, RadiatorForm
+from app.models import UserInteraction
 from Radiator.InsideCondition import InsideCondition
 from Radiator.main import decider
 
@@ -73,7 +74,7 @@ def logout():
 @login_required
 def mode(heating_mode):
     print("=== choosen heating mode : %s" % heating_mode)
-    print("== UserInteraction in databse ", UserInteraction.query.get(1))
+    print("== UserInteraction in databse ", UserInteraction.query.order_by(UserInteraction.id.desc()).first())
     if heating_mode == "eco":
         # écrire en base un userInteraction
         print("=== setting eco")

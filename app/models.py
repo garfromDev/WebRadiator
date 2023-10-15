@@ -39,6 +39,24 @@ class OverruledStatus:
     status: DatedStatus
     overMode: OverMode = OverMode.UNKNOWN
 
+    @classmethod
+    def _generate(cls, status: bool, exp_date: datetime, overmode: OverMode):
+        return OverruledStatus(DatedStatus(status, exp_date), overmode)
+
+    def __composite_values__(self):
+        return self.status.__composite_values__(), self.overMode
+
+    def __repr__(self):
+        return f"{self.overMode} {self.status.status} until {self.status.expiration_date}"
+
+    def __eq__(self, other):
+        return isinstance(other, OverruledStatus) and \
+               self.status == other.status and \
+               self.overMode == other.overMode
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
 
 class UserInteraction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -46,7 +64,7 @@ class UserInteraction(db.Model):
     overruled_exp_date = db.Column(db.DateTime, default=datetime(2021, 1, 1))
     overruled = db.composite(DatedStatus, overruled_status, overruled_exp_date)
     overmode_status = db.Column(db.Enum(OverMode), default=OverMode.UNKNOWN)
-    overmode = db.composite(OverruledStatus, overruled_status, overruled_exp_date, overmode_status)
+    overmode = db.composite(OverruledStatus._generate, overruled_status, overruled_exp_date, overmode_status)
     userbonus_status = db.Column(db.Boolean, default=False)
     userbonus_exp_date = db.Column(db.DateTime, default=datetime(2021, 1, 1))
     userbonus = db.composite(DatedStatus, userbonus_status, userbonus_exp_date)
