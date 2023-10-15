@@ -27,3 +27,9 @@ Pour développer le flask, on va imaginer un objet Radiator qui expose une inter
 
 
 POur la phase de test, user stephane mdp chat
+
+== Base de donnée
+commit
+flask db stamp head
+flask db migrate
+flask db upgrade
