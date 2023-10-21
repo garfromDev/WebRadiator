@@ -7,8 +7,8 @@ from enum import Enum
 class InteractionChoices(Enum):
     confort = "Confort"
     eco = "Eco"
-    hotter = "Plus chaud"
-    cooler = "Moins chaud"
+    more_heat = "Plus chaud"
+    less_heat = "Moins chaud"
     off = "Off"
 
 
@@ -20,8 +20,8 @@ class LoginForm(FlaskForm):
 
 
 class RadiatorForm(FlaskForm):
-    confort = SubmitField(InteractionChoices.confort.value)
+    confort = SubmitField(InteractionChoices.confort.value, render_kw={"class": "button"})
     eco = SubmitField(InteractionChoices.eco.value)
     off = SubmitField(InteractionChoices.off.value)
-    more_heat = SubmitField(InteractionChoices.hotter.value)
-    less_heat = SubmitField(InteractionChoices.cooler.value)
+    more_heat = SubmitField(InteractionChoices.more_heat.value)
+    less_heat = SubmitField(InteractionChoices.less_heat.value)
