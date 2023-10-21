@@ -1,0 +1,46 @@
+/* Style général pour les boutons */
+button {
+  background-color: #007bff; /* Couleur de fond */
+  color: #fff; /* Couleur du texte */
+  padding: 10px 20px; /* Remplissage */
+  border: none; /* Supprimer la bordure par défaut */
+  border-radius: 5px; /* Coins arrondis */
+  cursor: pointer; /* Curseur de type main pour indiquer qu'il s'agit d'un bouton cliquable */
+  margin: 5px; /* Marge autour des boutons */
+}
+
+/* Style au survol (hover) */
+button:hover {
+  background-color: #0056b3; /* Couleur de fond au survol */
+}
+
+/* Style actif (active) lorsque le bouton est cliqué */
+button:active {
+  background-color: #003c80; /* Couleur de fond active */
+}
+
+/* Style pour les boutons de type submit */
+button[type="submit"] {
+  border: none; /* Supprimer la bordure par défaut pour les boutons de type submit */
+}
+
+/* Style pour chaque bouton spécifique */
+button.confort {
+  background-color: #28a745; /* Couleur de fond spécifique pour le bouton Confort */
+}
+
+button.eco {
+  background-color: #ffc107; /* Couleur de fond spécifique pour le bouton Éco */
+}
+
+button.off {
+  background-color: #dc3545; /* Couleur de fond spécifique pour le bouton Arrêt */
+}
+
+button.more_heat {
+  background-color: #ff5733; /* Couleur de fond spécifique pour le bouton Plus de chaleur */
+}
+
+button.less_heat {
+  background-color: #3333ff; /* Couleur de fond spécifique pour le bouton Moins de chaleur */
+}

@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Optional
 from dataclasses import dataclass
 from enum import Enum
+from typing import TypeVar, Type
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -58,6 +59,9 @@ class OverruledStatus:
         return not self.__eq__(other)
 
 
+T = TypeVar('T', bound='UserInteraction')
+
+
 class UserInteraction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     overruled_status = db.Column(db.Boolean, default=False)
@@ -75,6 +79,10 @@ class UserInteraction(db.Model):
 
     def __repr__(self):
         return self.__dict__.__repr__()
+
+    @classmethod
+    def current(cls: Type[T]) -> Optional[T]:
+        return cls.query.order_by(UserInteraction.id.desc()).first()
 
 
 class User(db.Model, UserMixin):
