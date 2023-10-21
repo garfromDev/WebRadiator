@@ -3,10 +3,8 @@ from flask import render_template, redirect, flash, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 import random
-from .models import User, UserInteraction, OverMode, DatedStatus
-
-from app.forms import LoginForm, RadiatorForm
-from app.models import UserInteraction
+from app.forms import LoginForm, RadiatorForm, InteractionChoices
+from app.models import User, UserInteraction, OverMode, DatedStatus
 from Radiator.InsideCondition import InsideCondition
 from Radiator.main import decider
 
@@ -72,14 +70,23 @@ def logout():
 
 @app.route('/mode/<heating_mode>')
 @login_required
-def mode(heating_mode):
+def mode(heating_mode: str):
+    """ Ecrit en base un enregistrement de UserInteaction pour le choix de l'utilisateur """
     print("=== choosen heating mode : %s" % heating_mode)
-    print("== UserInteraction in databse ", UserInteraction.query.order_by(UserInteraction.id.desc()).first())
-    if heating_mode == "eco":
-        # écrire en base un userInteraction
-        print("=== setting eco")
+    print("== UserInteraction in database ", UserInteraction.query.order_by(UserInteraction.id.desc()).first())
+    usi = None
+    heating_mode = InteractionChoices(heating_mode)
+    if heating_mode == InteractionChoices.eco:
         usi = UserInteraction(overruled=DatedStatus(True), overmode_status=OverMode.ECO)
+    elif heating_mode == InteractionChoices.confort:
+        usi = UserInteraction(overruled=DatedStatus(True), overmode_status=OverMode.CONFORT)
+    elif heating_mode == InteractionChoices.off:
+        pass  # FIXME: not implemented, décider ce qu'on en fait  ?
+    elif heating_mode == InteractionChoices.hotter:
+        usi = UserInteraction(overruled=DatedStatus(True), overmode_status=OverMode.CONFORT, userbonus=DatedStatus(True))
+    elif heating_mode ==InteractionChoices.cooler:
+        usi = UserInteraction(overruled=DatedStatus(True), overmode_status=OverMode.CONFORT, userbonus=DatedStatus(True))
+    if usi:
         db.session.add(usi)
         db.session.commit()
-        print("=== eco set")
     return redirect(url_for('main_page'))
