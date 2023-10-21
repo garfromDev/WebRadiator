@@ -16,6 +16,7 @@
       <env name="SECRET_KEY" value="maclefsecrete" />
       <env name="RADIATOR_TEST_ENVIRONMENT" value="TRUE" />
       <env name="FLASK_DEBUG" value="1" />
+      <env name="CALENDAR_PATH" value="$PROJECT_DIR$/Radiator" />
     </envs>
     <method v="2" />
   </configuration>

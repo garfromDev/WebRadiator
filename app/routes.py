@@ -73,20 +73,21 @@ def logout():
 def mode(heating_mode: str):
     """ Ecrit en base un enregistrement de UserInteaction pour le choix de l'utilisateur """
     print("=== choosen heating mode : %s" % heating_mode)
-    print("== UserInteraction in database ", UserInteraction.query.order_by(UserInteraction.id.desc()).first())
+    print("== UserInteraction in database before ", UserInteraction.query.order_by(UserInteraction.id.desc()).first())
     usi = None
-    heating_mode = InteractionChoices(heating_mode)
-    if heating_mode == InteractionChoices.eco:
+    if heating_mode == InteractionChoices.eco.name:
         usi = UserInteraction(overruled=DatedStatus(True), overmode_status=OverMode.ECO)
-    elif heating_mode == InteractionChoices.confort:
+    elif heating_mode == InteractionChoices.confort.name:
         usi = UserInteraction(overruled=DatedStatus(True), overmode_status=OverMode.CONFORT)
-    elif heating_mode == InteractionChoices.off:
+    elif heating_mode == InteractionChoices.off.name:
         pass  # FIXME: not implemented, décider ce qu'on en fait  ?
-    elif heating_mode == InteractionChoices.hotter:
+    elif heating_mode == InteractionChoices.more_heat.name:
         usi = UserInteraction(overruled=DatedStatus(True), overmode_status=OverMode.CONFORT, userbonus=DatedStatus(True))
-    elif heating_mode ==InteractionChoices.cooler:
+    elif heating_mode ==InteractionChoices.less_heat.name:
         usi = UserInteraction(overruled=DatedStatus(True), overmode_status=OverMode.CONFORT, userbonus=DatedStatus(True))
     if usi:
         db.session.add(usi)
         db.session.commit()
+        print("==Route== UserInteraction in database after ",
+              UserInteraction.query.order_by(UserInteraction.id.desc()).first())
     return redirect(url_for('main_page'))
