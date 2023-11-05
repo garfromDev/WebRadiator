@@ -1,3 +1,4 @@
+from Radiator.HeatMode import ComfortMode
 from app import app, db
 from flask import render_template, redirect, flash, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
@@ -73,21 +74,23 @@ def logout():
 def mode(heating_mode: str):
     """ Ecrit en base un enregistrement de UserInteaction pour le choix de l'utilisateur """
     print("=== choosen heating mode : %s" % heating_mode)
-    print("== UserInteraction in database before ", UserInteraction.query.order_by(UserInteraction.id.desc()).first())
+    # print("== UserInteraction in database before ", UserInteraction.query.order_by(UserInteraction.id.desc()).first())
     usi = None
-    if heating_mode == InteractionChoices.eco.name:
+    if heating_mode == "eco":
         usi = UserInteraction(overruled=DatedStatus(True), overmode_status=OverMode.ECO)
-    elif heating_mode == InteractionChoices.confort.name:
+    elif heating_mode == "minus1":
         usi = UserInteraction(overruled=DatedStatus(True), overmode_status=OverMode.CONFORT)
     elif heating_mode == InteractionChoices.off.name:
         pass  # FIXME: not implemented, décider ce qu'on en fait  ?
-    elif heating_mode == InteractionChoices.more_heat.name:
-        usi = UserInteraction(overruled=DatedStatus(True), overmode_status=OverMode.CONFORT, userbonus=DatedStatus(True))
-    elif heating_mode ==InteractionChoices.less_heat.name:
-        usi = UserInteraction(overruled=DatedStatus(True), overmode_status=OverMode.CONFORT, userbonus=DatedStatus(True))
+    elif heating_mode == "confort":
+        usi = UserInteraction(overruled=DatedStatus(True), overmode_status=OverMode.CONFORT,
+                              userbonus=DatedStatus(True))
+    elif heating_mode == "minus2":
+        usi = UserInteraction(overruled=DatedStatus(True), overmode_status=OverMode.CONFORT,
+                              userdown=DatedStatus(True))
     if usi:
         db.session.add(usi)
         db.session.commit()
-        print("==Route== UserInteraction in database after ",
-              UserInteraction.query.order_by(UserInteraction.id.desc()).first())
+        # print("==Route== UserInteraction in database after ",
+        #       UserInteraction.query.order_by(UserInteraction.id.desc()).first())
     return redirect(url_for('main_page'))

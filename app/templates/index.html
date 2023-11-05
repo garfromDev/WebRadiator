@@ -1,16 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Temperature
+<h1><i class="fa-solid fa-temperature-three-quarters"></i>
     {{ radiator.temperature() }}
  </h1>
+<i class="fa-solid fa-temperature-three-quarters"></i>
 <div>
-    <a href="{{ url_for('mode', heating_mode='eco') }}">Eco</a>
-    <a href="{{ url_for('mode', heating_mode='confort') }}">Confort +</a>
-    <a href="{{ url_for('mode', heating_mode='minus1') }}">Confort</a>
-    <a href="{{ url_for('mode', heating_mode='minus2') }}">Confort -</a>
+    <a href="{{ url_for('mode', heating_mode='eco') }}" role="button" class="btn btn-primary">Eco</a>
+    <a href="{{ url_for('mode', heating_mode='confort') }}" role="button" class="btn btn-primary">Confort +</a>
+    <a href="{{ url_for('mode', heating_mode='minus1') }}" role="button" class="btn btn-primary">Confort</a>
+    <a href="{{ url_for('mode', heating_mode='minus2') }}" role="button" class="btn btn-primary">Confort -</a>
 </div>
-<div>
-    {{form.more_heat}} {{form.less_heat}}
-</div>
+
 {% endblock %}

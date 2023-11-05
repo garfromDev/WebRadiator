@@ -29,7 +29,7 @@ class DatedStatus:
         return not self.__eq__(other)
 
 
-class OverMode(Enum):
+class OverMode(str, Enum):
     ECO = "ECO"
     CONFORT = "CONFORT"
     UNKNOWN = "UNKNOWN"

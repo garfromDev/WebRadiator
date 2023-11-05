@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_bootstrap import Bootstrap
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -9,6 +10,7 @@ import sys
 # at this point, ENV doesn't contain ENV variables declared in Pycharm settings
 
 app = Flask(__name__)
+bootstrap = Bootstrap(app)
 login = LoginManager(app)
 login.login_view = 'login'  # so flask know how to log users
 app.config.from_object(Config)
