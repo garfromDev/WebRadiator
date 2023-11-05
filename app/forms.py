@@ -23,5 +23,5 @@ class RadiatorForm(FlaskForm):
     confort = SubmitField(InteractionChoices.confort.value, render_kw={"class": "button"})
     eco = SubmitField(InteractionChoices.eco.value)
     off = SubmitField(InteractionChoices.off.value)
-    more_heat = SubmitField(InteractionChoices.more_heat.value)
-    less_heat = SubmitField(InteractionChoices.less_heat.value)
+
+
