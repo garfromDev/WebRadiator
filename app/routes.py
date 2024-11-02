@@ -2,7 +2,7 @@ from Radiator.HeatMode import ComfortMode
 from app import app, db
 from flask import render_template, redirect, flash, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
-from werkzeug.urls import url_parse
+from urllib.parse import urlparse
 import random
 from app.forms import LoginForm, RadiatorForm, InteractionChoices
 from app.models import User, UserInteraction, OverMode, DatedStatus
@@ -56,7 +56,7 @@ def login():
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
+        if not next_page or urlparse(next_page).netloc != '':
             # domain is a full domain, not an inside domain  of my site -> forbidden
             next_page = url_for('main_page')
         return redirect(next_page)
