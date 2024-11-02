@@ -4,4 +4,5 @@ flask-wtf==1.0.1
 flask-sqlalchemy
 flask-migrate
 flask-login
+flask_bootstrap>=3.3.7.1,<4
 werkzeug
