@@ -1,8 +1,8 @@
-flask>=2.0.3,<3
+flask>=2.3.3,<2.4
 python-dotenv>=0.2
-flask-wtf==1.0.1
+flask-wtf==1.1.2
 flask-sqlalchemy
 flask-migrate
 flask-login
 flask_bootstrap>=3.3.7.1,<4
-werkzeug
+werkzeug<3
