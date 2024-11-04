@@ -29,7 +29,14 @@ Pour développer le flask, on va imaginer un objet Radiator qui expose une inter
 POur la phase de test, user stephane mdp chat
 
 == Base de donnée
-commit
-flask db stamp head
-flask db migrate
-flask db upgrade
+----
+commit  
+flask db stamp head    
+flask db migrate  
+flask db upgrade  
+----
+from app import app, db
+from app.models import UserInteraction
+app.app_context().push()
+query = db.select(UserInteraction)
+usi = db.session.scalars(query).all()
