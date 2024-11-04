@@ -7,6 +7,7 @@ import random
 from app.forms import LoginForm, RadiatorForm, InteractionChoices
 from app.models import User, UserInteraction, OverMode, DatedStatus
 from Radiator.InsideCondition import InsideCondition
+from Radiator.DecisionMaker import DecisionMaker
 from Radiator.main import decider
 
 
@@ -36,6 +37,7 @@ posts = [
 @login_required
 def main_page():
     radiator = InsideCondition.shared()
+    mode = DecisionMaker().make_decision()
     form = RadiatorForm()
     if form.validate_on_submit():
         if form.eco.data:
@@ -89,8 +91,9 @@ def mode(heating_mode: str):
         usi = UserInteraction(overruled=DatedStatus(True), overmode_status=OverMode.CONFORT,
                               userdown=DatedStatus(True))
     if usi:
+        print("=== created userInteraction : ", usi)
         db.session.add(usi)
         db.session.commit()
-        # print("==Route== UserInteraction in database after ",
-        #       UserInteraction.query.order_by(UserInteraction.id.desc()).first())
+        print("==Route== UserInteraction in database after ",
+              UserInteraction.query.order_by(UserInteraction.id.desc()).first())
     return redirect(url_for('main_page'))

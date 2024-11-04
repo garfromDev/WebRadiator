@@ -44,3 +44,20 @@ button.more_heat {
 button.less_heat {
   background-color: #3333ff; /* Couleur de fond spécifique pour le bouton Moins de chaleur */
 }
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+
+.centered-element{
+    margin-left: auto;
+    margin-right: auto;
+    background-color: grey;
+    padding: 15px;
+    width: 320px;
+}
+
