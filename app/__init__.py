@@ -21,12 +21,12 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)  # pour le suivi des migrations de la base
 
-print("test :", app.config['RADIATOR_TEST_ENVIRONMENT'])
-print("secret :", app.config['SECRET_KEY'])
+app.logger.info("test :", app.config['RADIATOR_TEST_ENVIRONMENT'])
+app.logger.info("secret :", app.config['SECRET_KEY'])
 os.environ["RADIATOR_TEST_ENVIRONMENT"] = str(app.config['RADIATOR_TEST_ENVIRONMENT'])
-print("test", os.environ.get("RADIATOR_TEST_ENVIRONMENT"))
+app.logger.info("test", os.environ.get("RADIATOR_TEST_ENVIRONMENT"))
 from Radiator.main import start_radiator
-print("starting radiator")
+app.logger.info("starting radiator")
 with app.app_context():
     start_radiator(app, avoid_flash=True)
 
