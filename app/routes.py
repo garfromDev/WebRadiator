@@ -1,4 +1,3 @@
-from Radiator.HeatMode import ComfortMode
 from app import app, db
 from flask import render_template, redirect, flash, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
@@ -7,8 +6,6 @@ import random
 from app.forms import LoginForm, RadiatorForm, InteractionChoices
 from app.models import User, UserInteraction, OverMode, DatedStatus
 from Radiator.InsideCondition import InsideCondition
-from Radiator.DecisionMaker import DecisionMaker
-from Radiator.main import decider
 
 
 class Radiator:
@@ -20,29 +17,11 @@ class Radiator:
     def connected(self):
         return bool(random.choice([True, False]))
 
-
-posts = [
-    {
-        'author': {'username': 'John'},
-        'body': 'Beautiful day in Portland!'
-    },
-    {
-        'author': {'username': 'Susan'},
-        'body': 'The Avengers movie was so cool!'
-    }
-]
-
-
 @app.route('/')
-@login_required
+# @login_required
 def main_page():
     radiator = InsideCondition.shared()
-    mode = DecisionMaker().make_decision()
     form = RadiatorForm()
-    if form.validate_on_submit():
-        if form.eco.data:
-            print("=== eco mode")
-            decider._heater._setEcoMode()
     return render_template('index.html', title='Radiator', radiator=radiator, form=form)
 
 
@@ -72,7 +51,7 @@ def logout():
 
 
 @app.route('/mode/<heating_mode>')
-@login_required
+#@login_required
 def mode(heating_mode: str):
     """ Ecrit en base un enregistrement de UserInteaction pour le choix de l'utilisateur """
     print("=== choosen heating mode : %s" % heating_mode)
