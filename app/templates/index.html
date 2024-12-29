@@ -6,4 +6,9 @@
         <a href="{{ url_for('mode', heating_mode='confort') }}" role="button" class="btn btn-primary">Confort +</a>
         <a href="{{ url_for('mode', heating_mode='minus1') }}" role="button" class="btn btn-primary">Confort</a>
         <a href="{{ url_for('mode', heating_mode='minus2') }}" role="button" class="btn btn-primary">Confort -</a>
-{% endblock %}
+        <br/>
+<span>Calendriers</span>
+        <a href="{{ url_for('calendar', calendar_type='work') }}" role="button" class="btn btn-secondary">Travail</a>
+        <a href="{{ url_for('calendar', calendar_type='holiday') }}" role="button" class="btn btn-secondary">Vacance</a>
+        <a href="{{ url_for('calendar', calendar_type='off') }}" role="button" class="btn btn-secondary">Absence</a>
+{% endblock %

@@ -1,4 +1,6 @@
-from app import db, login
+import enum
+
+from app import db, login,
 from datetime import datetime
 from typing import Optional
 from dataclasses import dataclass
@@ -6,6 +8,7 @@ from enum import Enum
 from typing import TypeVar, Type
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+
 
 
 class DatedStatus:
@@ -98,6 +101,31 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+class InUse(enum.Enum):
+    true = True
+
+class CalendarInUse(db.Model):
+    """ Cette table contient les noms des calendriers disponibles, un seul est le courant """
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    # un seul calendrier actif à un instant donné
+    in_use = db.Column(db.Enum(InUse), unique=True)
+
+    def set_in_use(self, calendar: str):
+        cal_in_use = db.session.execute(db.select(CalendarInUse).filter_by(CalendarInUse.in_use==InUse.true)).scalar_one()
+        if cal_in_use and cal_in_use.name == calendar:
+            return  # already in use
+        elif cal_in_use:
+            cal_in_use.in_use = None
+            existing_cal = db.session.execute(db.select(CalendarInUse).filter_by(CalendarInUse.name==calednar)).scalar_one()
+            if existing_cal:
+                existing_cal.in_use = InUse.true
+            else:
+                new_cal = CalendarInUse(name=calendar, in_use=InUse.true)
+                db.session.add(new_cal)
+        db.session.commit()
+
 
 
 @login.user_loader
