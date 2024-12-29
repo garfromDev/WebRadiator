@@ -54,8 +54,6 @@ def logout():
 #@login_required
 def mode(heating_mode: str):
     """ Ecrit en base un enregistrement de UserInteaction pour le choix de l'utilisateur """
-    print("=== choosen heating mode : %s" % heating_mode)
-    # print("== UserInteraction in database before ", UserInteraction.query.order_by(UserInteraction.id.desc()).first())
     usi = None
     if heating_mode == "eco":
         usi = UserInteraction(overruled=DatedStatus(True), overmode_status=OverMode.ECO)
@@ -70,9 +68,19 @@ def mode(heating_mode: str):
         usi = UserInteraction(overruled=DatedStatus(True), overmode_status=OverMode.CONFORT,
                               userdown=DatedStatus(True))
     if usi:
-        print("=== created userInteraction : ", usi)
         db.session.add(usi)
         db.session.commit()
-        print("==Route== UserInteraction in database after ",
-              UserInteraction.query.order_by(UserInteraction.id.desc()).first())
+
     return redirect(url_for('main_page'))
+
+
+@app.route('/calendar/<calendar_type>')
+def set_calendar(calendar_type: str):
+    """ Bascule le calendrier  :
+    semaine  : la  semaine  définie par week.json
+    vacance : la semaine définie par holiday.json
+    absence: mode  eco  permanent (calendrier nobody.json)
+    a terme, on pourra mettre en  base le calendrier et modifier HeatCalendar pour  lire dans la base
+    puis ensuite ajouter une interface de modification des calendriers
+    """
+
