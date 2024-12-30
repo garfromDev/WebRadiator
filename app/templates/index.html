@@ -1,13 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div>
-    <i class="fa-solid fa-temperature-three-quarters"></i>
-    <div class="container">
+        <br/>
         <a href="{{ url_for('mode', heating_mode='eco') }}" role="button" class="btn btn-primary">Eco</a>
         <a href="{{ url_for('mode', heating_mode='confort') }}" role="button" class="btn btn-primary">Confort +</a>
         <a href="{{ url_for('mode', heating_mode='minus1') }}" role="button" class="btn btn-primary">Confort</a>
         <a href="{{ url_for('mode', heating_mode='minus2') }}" role="button" class="btn btn-primary">Confort -</a>
-    </div>
-</div>
 {% endblock %}
