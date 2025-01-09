@@ -75,7 +75,7 @@ def mode(heating_mode: str):
 
 
 @app.route('/calendar/<calendar_type>')
-def set_calendar(calendar_type: str):
+def calendar(calendar_type: str):
     """ Bascule le calendrier  :
     semaine  : la  semaine  définie par week.json
     vacance : la semaine définie par holiday.json
@@ -83,4 +83,6 @@ def set_calendar(calendar_type: str):
     a terme, on pourra mettre en  base le calendrier et modifier HeatCalendar pour  lire dans la base
     puis ensuite ajouter une interface de modification des calendriers
     """
+    # TODO: implement
+    return redirect(url_for('main_page'))
 
