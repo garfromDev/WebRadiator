@@ -1,6 +1,6 @@
 import enum
 
-from app import db, login,
+from app import db, login
 from datetime import datetime
 from typing import Optional
 from dataclasses import dataclass
