@@ -15,7 +15,7 @@
       <env name="FLASK_ENV" value="development" />
       <env name="SECRET_KEY" value="maclefsecrete" />
       <env name="RADIATOR_TEST_ENVIRONMENT" value="TRUE" />
-      <env name="FLASK_DEBUG" value="1" />
+      <env name="FLASK_DEBUG" value="0" />
       <env name="CALENDAR_PATH" value="$PROJECT_DIR$/Radiator" />
     </envs>
     <method v="2" />

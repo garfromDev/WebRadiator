@@ -5,24 +5,13 @@ from urllib.parse import urlparse
 import random
 from app.forms import LoginForm, RadiatorForm, InteractionChoices
 from app.models import User, UserInteraction, OverMode, DatedStatus
-from Radiator.InsideCondition import InsideCondition
 
-
-class Radiator:
-    @property
-    def temperature(self):
-        return random.randint(15, 25)
-
-    @property
-    def connected(self):
-        return bool(random.choice([True, False]))
 
 @app.route('/')
 # @login_required
 def main_page():
-    radiator = InsideCondition.shared()
     form = RadiatorForm()
-    return render_template('index.html', title='Radiator', radiator=radiator, form=form)
+    return render_template('index.html', title='Radiator',  form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])
