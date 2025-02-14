@@ -1,0 +1,2 @@
+client FTp pour ios : https://github.com/PeqNP/FTPKit
+sinon voir https://github.com/AFNetworking/AFNetworking (ne gère pas FTP, only POST?)

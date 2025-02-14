@@ -1,0 +1,13 @@
+{
+	"weekCalendar": {
+		"Monday": {
+			"02:45":"eco",
+			"08:00": "confort",
+			"08:15": "confort"
+		},
+		"Sunday": {
+			"12:00": "confort",
+			"12:15": "confort"
+		}
+	}
+}

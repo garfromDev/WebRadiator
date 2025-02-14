@@ -1,0 +1,5 @@
+#! /usr/bin/awk -f
+# convert the Radiator.log file to csv file for graphical exploitation
+# see https://www.shellunix.com/awk.html for awk use
+BEGIN { print "Date;Time;Temperature;Mode" }
+$3 == "makeDecision" && NF > 5 { print $1 ";" $2 ";" $9 ";" $6 }
