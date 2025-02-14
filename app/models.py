@@ -10,7 +10,6 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-
 class DatedStatus:
     def __init__(self, status: bool = True, expiration_date: Optional[datetime] = None):
         """ Par défaut, les statuts expirent le jour même à minuit et sont actifs """
@@ -44,7 +43,7 @@ class OverruledStatus:
     overMode: OverMode = OverMode.UNKNOWN
 
     @classmethod
-    def _generate(cls, status: bool, exp_date: datetime, overmode: OverMode):
+    def generate(cls, status: bool, exp_date: datetime, overmode: OverMode):
         return OverruledStatus(DatedStatus(status, exp_date), overmode)
 
     def __composite_values__(self):
@@ -71,7 +70,7 @@ class UserInteraction(db.Model):
     overruled_exp_date = db.Column(db.DateTime, default=datetime(2021, 1, 1))
     overruled = db.composite(DatedStatus, overruled_status, overruled_exp_date)
     overmode_status = db.Column(db.Enum(OverMode), default=OverMode.UNKNOWN)
-    overmode = db.composite(OverruledStatus._generate, overruled_status, overruled_exp_date, overmode_status)
+    overmode = db.composite(OverruledStatus.generate, overruled_status, overruled_exp_date, overmode_status)
     userbonus_status = db.Column(db.Boolean, default=False)
     userbonus_exp_date = db.Column(db.DateTime, default=datetime(2021, 1, 1))
     userbonus = db.composite(DatedStatus, userbonus_status, userbonus_exp_date)
@@ -102,8 +101,10 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+
 class InUse(enum.Enum):
     true = True
+
 
 class CalendarInUse(db.Model):
     """ Cette table contient les noms des calendriers disponibles, un seul est le courant """
@@ -112,13 +113,15 @@ class CalendarInUse(db.Model):
     # un seul calendrier actif à un instant donné
     in_use = db.Column(db.Enum(InUse), unique=True)
 
-    def set_in_use(self, calendar: str):
-        cal_in_use = db.session.execute(db.select(CalendarInUse).filter_by(CalendarInUse.in_use==InUse.true)).scalar_one()
+    @classmethod
+    def set_in_use(cls, calendar: str):
+        cal_in_use = db.session.execute(db.select(CalendarInUse)
+                                        .filter_by(in_use=True)).scalar_one()
         if cal_in_use and cal_in_use.name == calendar:
             return  # already in use
         elif cal_in_use:
             cal_in_use.in_use = None
-            existing_cal = db.session.execute(db.select(CalendarInUse).filter_by(CalendarInUse.name==calednar)).scalar_one()
+            existing_cal = db.session.execute(db.select(CalendarInUse).filter_by(name=calendar)).scalar_one()
             if existing_cal:
                 existing_cal.in_use = InUse.true
             else:
@@ -126,6 +129,11 @@ class CalendarInUse(db.Model):
                 db.session.add(new_cal)
         db.session.commit()
 
+    # Attention, deprecated en 3.11, supprimé en 3.13
+    @classmethod
+    @property
+    def current(cls):
+        return db.session.execute(db.select(CalendarInUse).filter_by(CalendarInUse.in_use == InUse.true)).scalar_one()
 
 
 @login.user_loader

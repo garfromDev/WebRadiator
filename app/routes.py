@@ -1,10 +1,9 @@
 from app import app, db
 from flask import render_template, redirect, flash, url_for, request
-from flask_login import current_user, login_user, logout_user, login_required
+from flask_login import current_user, login_user, logout_user
 from urllib.parse import urlparse
-import random
 from app.forms import LoginForm, RadiatorForm, InteractionChoices
-from app.models import User, UserInteraction, OverMode, DatedStatus
+from app.models import User, UserInteraction, OverMode, DatedStatus, CalendarInUse
 
 
 @app.route('/')
@@ -40,7 +39,6 @@ def logout():
 
 
 @app.route('/mode/<heating_mode>')
-#@login_required
 def mode(heating_mode: str):
     """ Ecrit en base un enregistrement de UserInteaction pour le choix de l'utilisateur """
     usi = None
@@ -73,5 +71,5 @@ def calendar(calendar_type: str):
     puis ensuite ajouter une interface de modification des calendriers
     """
     # TODO: implement
+    CalendarInUse.set_in_use(calendar_type)
     return redirect(url_for('main_page'))
-
