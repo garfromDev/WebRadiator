@@ -116,24 +116,27 @@ class CalendarInUse(db.Model):
     @classmethod
     def set_in_use(cls, calendar: str):
         cal_in_use = db.session.execute(db.select(CalendarInUse)
-                                        .filter_by(in_use=True)).scalar_one()
+                                        .filter_by(in_use=InUse.true)).scalar()
+        existing_cal = db.session.execute(db.select(CalendarInUse).filter_by(name=calendar)).scalar()
         if cal_in_use and cal_in_use.name == calendar:
             return  # already in use
         elif cal_in_use:
             cal_in_use.in_use = None
-            existing_cal = db.session.execute(db.select(CalendarInUse).filter_by(name=calendar)).scalar_one()
-            if existing_cal:
-                existing_cal.in_use = InUse.true
-            else:
-                new_cal = CalendarInUse(name=calendar, in_use=InUse.true)
-                db.session.add(new_cal)
-        db.session.commit()
+            db.session.commit()
+        if existing_cal and existing_cal != cal_in_use:
+            existing_cal.in_use = InUse.true
+            db.session.commit()
+        else:
+            new_cal = CalendarInUse(name=calendar, in_use=InUse.true)
+            db.session.add(new_cal)
+            db.session.commit()
 
     # Attention, deprecated en 3.11, supprimé en 3.13
     @classmethod
     @property
-    def current(cls):
-        return db.session.execute(db.select(CalendarInUse).filter_by(CalendarInUse.in_use == InUse.true)).scalar_one()
+    def current(cls: T) -> T:
+        return db.session.execute(
+            db.select(CalendarInUse).filter_by(CalendarInUse.in_use == InUse.true)).scalar() or None
 
 
 @login.user_loader

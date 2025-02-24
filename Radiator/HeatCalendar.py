@@ -19,8 +19,8 @@
 # print(wk['weekCalendar']['Monday']['08:15'])
 # ==================================================
 import os
-
-from app.models import OverMode
+from typing import Optional
+from app.models import OverMode, CalendarInUse
 from .CST import CST
 from .logger_provider import logger
 import time
@@ -47,8 +47,11 @@ class HeatCalendar:
     # WARNING: no check done on metamode value
     def getCurrentMode(self) -> OverMode:
         # ouvrir le fichier
+        # Dans un premier temps, le calendrier va juste permettre de sélectionner le bon fichier
+        # Dans le futur, le calendrier sera stocké en base
+        cal_file = self._make_file_name(CalendarInUse.current.name) or self._calFile
         try:
-            with open(os.path.join(os.path.dirname(__file__), self._calFile)) as wcal:
+            with open(os.path.join(os.path.dirname(__file__), cal_file)) as wcal:
                 calendar = json.load(wcal)
                 metaMode = calendar['weekCalendar'][self.day()][self.hour()]
         except Exception as err:
@@ -90,6 +93,12 @@ class HeatCalendar:
     def _normalize(minutes) -> str:
         """ return 00, 15, 30, 45"""
         return f"{15 * (int(minutes) // 15):0=2}"
+
+    @staticmethod
+    def _make_file_name(calendar_name: Optional[str]) -> str:
+        if calendar_name:
+            return calendar_name + ".json"
+        return ""
 
 # PROBLEMATIQUE DE TEST
 # faire :  HeatCalendar(localtime = lambda x=1: time.strptime("2018 02 26 08 00", "%Y %m %d %H %M") ) pour

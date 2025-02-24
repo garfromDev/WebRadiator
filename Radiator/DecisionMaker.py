@@ -71,9 +71,10 @@ class DecisionMaker(object):
         if self.overruled:
             meta_mode = self.overmode
             info = info + "  applied overruled " + str(meta_mode)
+        # TODO: gérer le HG
         #  2 eco mode
         if meta_mode != OverMode.CONFORT:
-            # UNKNOWN will apply eco
+            # UNKNOWN ou OFF will apply eco
             self._heater.set_eco_mode()
             info = info + "  make decision setEcoMode"
             logger.info(info)

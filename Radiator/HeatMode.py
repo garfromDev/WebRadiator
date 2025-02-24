@@ -112,6 +112,10 @@ class HeatMode(object):
         self.sequencer.start(self._confortMinus2Seq)
         self._displayer.displayConfortMinus2Mode()
 
+    def set_hors_gel(self):
+        # demi alternance négative
+        self._setOutputs(minus=GPIO.HIGH, plus=GPIO.LOW)
+
     # set the pilot wire to a ratio of confort mode
     # allowed ration from 10 to 90
     def set_confort_ratio(self, ratio):
