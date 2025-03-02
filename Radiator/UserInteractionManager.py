@@ -1,14 +1,8 @@
 # -*- coding: utf-8 -*-
-import logging
 from datetime import datetime
 from typing import Protocol, Dict, Any, cast
 from app.models import UserInteraction, OverMode
-from .CST import CST
 from .logger_provider import logger
-
-
-CST.JSON_PATH = CST.BASE_PATH or './'  # the path to the weekly calendar
-CST.DEFAULT_TARGET_TEMP = None
 
 
 class UserInteractionProvider(Protocol):
@@ -31,10 +25,11 @@ class UserInteractionManager(object):
     def __init__(self, user_interaction_provider: UserInteractionProvider, app):
         self._userInputs = None
         self._user_interaction_provider = user_interaction_provider
-        self._app = app  # TODO remove ? par contre il faudrait mettre un défaut dans toutes les méthodes
+        self._app = app
+        logger.debug("Init  UserInteractionManager with app ", str(app))
 
-    def update(self, app) -> None:
-        self._userInputs = self._getUserInputs(app)
+    def update(self) -> None:
+        self._userInputs = self._getUserInputs()
 
     def overruled(self) -> bool:
         """
@@ -51,7 +46,7 @@ class UserInteractionManager(object):
         """
         try:
             return cast(OverMode, self._userInputs["overruled"]["overMode"])
-        except KeyError as err:
+        except KeyError:
             return OverMode.UNKNOWN
 
     def userBonus(self) -> bool:
@@ -66,7 +61,7 @@ class UserInteractionManager(object):
         """
         return self._isValid(self._userInputs["userDown"])
 
-    def _getUserInputs(self, app) -> Dict[str, Any]:
+    def _getUserInputs(self) -> Dict[str, Any]:
         """
           return userInteraction dictionary from the database
           if database access fails or database empty, return a stub dict
@@ -74,9 +69,9 @@ class UserInteractionManager(object):
         default = {"overruled": {"status": False, "expirationDate": "01-01-2000", "overMode": "UNKNOW"},
                    "userBonus": {"status": False, "expirationDate": "01-01-2000"},
                    "userDown": {"status": False, "expirationDate": "01-01-2000"},
-                   "targetTemp": CST.DEFAULT_TARGET_TEMP, }
+                   }
         try:
-            with app.app_context():
+            with self._app.app_context():
                 user_interaction: UserInteraction = self._user_interaction_provider.current()
                 res = user_interaction and {
                     "overruled": {"status": user_interaction.overruled_status,
@@ -86,7 +81,6 @@ class UserInteractionManager(object):
                                   "expirationDate": user_interaction.userbonus_exp_date},
                     "userDown": {"status": user_interaction.userdown_status,
                                  "expirationDate": user_interaction.userdown_exp_date},
-                    "targetTemp": user_interaction.targettemp or CST.DEFAULT_TARGET_TEMP,
                 } or default
         except Exception as err:
             # soit le fichier n'a pu être lu, soit le calendrier n'est pas complet
@@ -121,9 +115,10 @@ class UserInteractionManager(object):
 
 
 if __name__ == '__main__':
+    from app import app
     print("testing UserInteractionManager manually")
     # logging.basicConfig(filename='Radiator.log', level=logging.DEBUG, format='%(asctime)s %(message)s')
-    # FIXME: fournir un mock qui n'accède pas à la bse pour le test
-    test = UserInteractionManager()
+    # FIXME: fournir un mock qui n'accède pas à la base pour le test
+    test = UserInteractionManager(UserInteraction(), app)
     print("overruled : {}  userBonus : {}  userDown : {}  mode : {}".format(test.overruled(), test.userBonus(),
                                                                             test.userDown(), test.over_mode()))

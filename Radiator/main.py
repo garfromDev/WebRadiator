@@ -10,7 +10,7 @@ from .DecisionMaker import DecisionMaker
 from .Rolling import Rolling
 from .CST import CST
 from .RGB_Displayer import RGB_Displayer
-
+from .logger_provider import logger
 
 CST.DEBUG_STATUS = "debug.json"
 CST.DEBUG_KEY = "debug_mode"
@@ -26,17 +26,18 @@ decider = DecisionMaker(user_manager=UserInteractionManager(user_interaction_pro
 @scheduler.task('interval', id='make_decision', seconds=20, misfire_grace_time=900)
 def periodic_make_decision() -> None:
     with scheduler.app.app_context():
-        decider.make_decision(scheduler.app)
+        decider.make_decision()
 
 
 def main(app):
+    logger.info('!!!!!Starting scheduler ... !!!!!!')
     scheduler.init_app(app)
     scheduler.start()
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-    level = logging.DEBUG if _get_debug_status() else logging.INFO
-    logging.basicConfig(filename=CST.LOG_FILE, level=level, format='%(asctime)s %(message)s')
-    logging.info('!!!!! Started !!!!!!')
+    # for handler in logging.root.handlers[:]:
+    #     logging.root.removeHandler(handler)
+    # level = logging.DEBUG if _get_debug_status() else logging.INFO
+    # logger.basicConfig(filename=CST.LOG_FILE, level=level, format='%(asctime)s %(message)s')
+    logger.info('!!!!! Started !!!!!!')
 
 
 def _get_debug_status():
@@ -51,15 +52,17 @@ def _get_debug_status():
             res = debug[CST.DEBUG_KEY]
     except Exception as err:
         # soit le fichier n'a pu être lu, soit le dictionnaire n'est pas complet
-        logging.error(err)
+        logger.error(err)
         res = False
     return res
 
 
 def start_radiator(app, avoid_flash: bool = False):
     global s
+    logger.info("start_radiator")
     # display flashing sequence to confirm reboot
     if avoid_flash:  # from the web app, everything is loaded each time, so no flashing
+        logger.info("start_radiator")
         main(app)
     else:
         displayer = RGB_Displayer()

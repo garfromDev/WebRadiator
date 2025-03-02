@@ -34,6 +34,7 @@ class DatedStatus:
 class OverMode(str, Enum):
     ECO = "ECO"
     CONFORT = "CONFORT"
+    OFF = "OFF"
     UNKNOWN = "UNKNOWN"
 
 
@@ -136,7 +137,7 @@ class CalendarInUse(db.Model):
     @property
     def current(cls: T) -> T:
         return db.session.execute(
-            db.select(CalendarInUse).filter_by(CalendarInUse.in_use == InUse.true)).scalar() or None
+            db.select(CalendarInUse).filter_by(in_use=InUse.true)).scalar() or None
 
 
 @login.user_loader

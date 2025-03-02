@@ -59,7 +59,7 @@ class HeatCalendar:
             # complet
             logger.error(err)
             return OverMode.UNKNOWN
-        return OverMode(metaMode.upper())
+        return OverMode(metaMode.strip().upper())
 
     # return the day in the form of 'Monday', 'Tuesday', ...
     def day(self):

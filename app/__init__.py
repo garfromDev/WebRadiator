@@ -25,6 +25,5 @@ app.logger.info("test" + os.environ.get("RADIATOR_TEST_ENVIRONMENT", ""))
 from Radiator.main import start_radiator
 app.logger.info("starting radiator")
 with app.app_context():
+    app.logger.info("will  start radiator ")
     start_radiator(app, avoid_flash=True)
-
-from app import routes, models

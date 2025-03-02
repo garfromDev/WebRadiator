@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-import logging
 from typing import Optional, Any
-from app import models
 from app.models import OverMode
-from .CST import CST
 from .HeatCalendar import HeatCalendar
 from .HeatMode import HeatMode, ComfortMode
 from .UserInteractionManager import UserInteractionManager
@@ -41,20 +38,17 @@ class DecisionMaker(object):
 
     def __init__(
         self,
-        calendar=HeatCalendar(calFile=CST.WEEKCALJSON),
+        calendar=HeatCalendar(),
         user_manager: Optional[UserInteractionManager] = None,
     ):
         self._calendar = calendar
-        self.metaMode = self._calendar.getCurrentMode()
         self._heater = HeatMode()
-        self._userManager = user_manager or UserInteractionManager(
-            user_interaction_provider=models.UserInteraction()
-        )
+        self._userManager = user_manager
 
-    def make_decision(self, app) -> str:
+    def make_decision(self) -> str:
         # 0 get meta mode from calendar
         meta_mode: OverMode = self._calendar.getCurrentMode()
-        self._userManager.update(app)
+        self._userManager.update()
         info = "mode from calendar : " + str(meta_mode)
         logger.debug(
             "makeDecision metamode = {}  Bonus = {} "
@@ -72,27 +66,28 @@ class DecisionMaker(object):
             meta_mode = self.overmode
             info = info + "  applied overruled " + str(meta_mode)
         # TODO: gérer le HG
+
         #  2 eco mode
-        if meta_mode != OverMode.CONFORT:
+        if meta_mode == OverMode.OFF:
+            self._heater.set_hors_gel()
+            choosen_mode = "hors  gel"
+        elif meta_mode != OverMode.CONFORT:
             # UNKNOWN ou OFF will apply eco
             self._heater.set_eco_mode()
-            info = info + "  make decision setEcoMode"
-            logger.info(info)
-            return str(meta_mode)
-
-        # metaMode == CONFORT:
-        comfort_mode = ComfortMode()
-        #  3 adaptation of comfort mode according user bonus
-        if self.user_bonus:
-            comfort_mode = ComfortMode("confort")
-        elif self.user_down:
-            comfort_mode = ComfortMode("minus2")
-
-        # 5 application of comfort mode
-        self._heater.set_from_confort_mode(comfort_mode)
-        info = info + "  Heating mode applied : {}".format(comfort_mode)
+            choosen_mode = "eco"
+        else:
+            # metaMode == CONFORT:
+            comfort_mode = ComfortMode()
+            #  3 adaptation of comfort mode according user bonus
+            if self.user_bonus:
+                comfort_mode = ComfortMode("confort")
+            elif self.user_down:
+                comfort_mode = ComfortMode("minus2")
+            self._heater.set_from_confort_mode(comfort_mode)
+            choosen_mode = comfort_mode
+        info += f"  Heating mode applied : {choosen_mode}"
         logger.info(info)
-        return str(comfort_mode)
+        return str(choosen_mode)
 
 
 if __name__ == "__main__":
