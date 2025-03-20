@@ -4,7 +4,7 @@ from app.models import OverMode
 from .HeatCalendar import HeatCalendar
 from .HeatMode import HeatMode, ComfortMode
 from .UserInteractionManager import UserInteractionManager
-from .logger_provider import logger
+from app import app
 
 
 class DecisionMaker(object):
@@ -47,10 +47,11 @@ class DecisionMaker(object):
 
     def make_decision(self) -> str:
         # 0 get meta mode from calendar
+        print("make decision")
         meta_mode: OverMode = self._calendar.getCurrentMode()
         self._userManager.update()
-        info = "mode from calendar : " + str(meta_mode)
-        logger.debug(
+        info = "mode from calendar {} : {} ".format(self._calendar.get_current_calendar(), str(meta_mode))
+        app.logger.debug(
             "makeDecision metamode = {}  Bonus = {} "
             "  userDown = {} overruled = {} overMode = {}".format(
                 meta_mode,
@@ -65,13 +66,12 @@ class DecisionMaker(object):
         if self.overruled:
             meta_mode = self.overmode
             info = info + "  applied overruled " + str(meta_mode)
-        # TODO: gérer le HG
 
         #  2 eco mode
         if meta_mode == OverMode.OFF:
             self._heater.set_hors_gel()
             choosen_mode = "hors  gel"
-        elif meta_mode != OverMode.CONFORT:
+        elif meta_mode == OverMode.ECO:
             # UNKNOWN ou OFF will apply eco
             self._heater.set_eco_mode()
             choosen_mode = "eco"
@@ -86,7 +86,8 @@ class DecisionMaker(object):
             self._heater.set_from_confort_mode(comfort_mode)
             choosen_mode = comfort_mode
         info += f"  Heating mode applied : {choosen_mode}"
-        logger.info(info)
+        app.logger.info(info)
+        print(info)
         return str(choosen_mode)
 
 

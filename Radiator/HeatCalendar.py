@@ -61,6 +61,10 @@ class HeatCalendar:
             return OverMode.UNKNOWN
         return OverMode(metaMode.strip().upper())
 
+    def get_current_calendar(self) -> str:
+        """ Le calendrier  en usage  (chaine pour l'affichage)"""
+        return CalendarInUse.current.name or "Aucun"
+
     # return the day in the form of 'Monday', 'Tuesday', ...
     def day(self):
         # strftime return a string

@@ -1,12 +1,11 @@
 import enum
 
-from app import db, login
+from app import db
 from datetime import datetime
 from typing import Optional
 from dataclasses import dataclass
 from enum import Enum
 from typing import TypeVar, Type
-from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -88,21 +87,6 @@ class UserInteraction(db.Model):
         return cls.query.order_by(UserInteraction.id.desc()).first()
 
 
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    login = db.Column(db.String(64), index=True, unique=True)
-    password_hash = db.Column(db.String(128))
-
-    def __repr__(self):
-        return '<User {}>'.format(self.login)
-
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
-
 class InUse(enum.Enum):
     true = True
 
@@ -138,8 +122,3 @@ class CalendarInUse(db.Model):
     def current(cls: T) -> T:
         return db.session.execute(
             db.select(CalendarInUse).filter_by(in_use=InUse.true)).scalar() or None
-
-
-@login.user_loader
-def load_user(uid):
-    return User.query.get(int(uid))

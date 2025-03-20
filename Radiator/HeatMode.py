@@ -114,7 +114,8 @@ class HeatMode(object):
 
     def set_hors_gel(self):
         # demi alternance négative
-        self._setOutputs(minus=GPIO.HIGH, plus=GPIO.LOW)
+        if not test:
+            self._setOutputs(minus=GPIO.HIGH, plus=GPIO.LOW)
 
     # set the pilot wire to a ratio of confort mode
     # allowed ration from 10 to 90

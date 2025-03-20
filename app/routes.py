@@ -1,41 +1,14 @@
 from app import app, db
 from flask import render_template, redirect, flash, url_for, request
-from flask_login import current_user, login_user, logout_user
-from urllib.parse import urlparse
 from app.forms import LoginForm, RadiatorForm, InteractionChoices
-from app.models import User, UserInteraction, OverMode, DatedStatus, CalendarInUse
+from app.models import UserInteraction, OverMode, DatedStatus, CalendarInUse
 
 
+app.logger.info("loading  routes")
 @app.route('/')
-# @login_required
 def main_page():
     form = RadiatorForm()
     return render_template('index.html', title='Radiator',  form=form)
-
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('main_page'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(login=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
-        next_page = request.args.get('next')
-        if not next_page or urlparse(next_page).netloc != '':
-            # domain is a full domain, not an inside domain  of my site -> forbidden
-            next_page = url_for('main_page')
-        return redirect(next_page)
-    return render_template('login.html', title='Sign In', form=form)
-
-
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('main_page'))
 
 
 @app.route('/mode/<heating_mode>')

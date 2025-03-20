@@ -26,7 +26,7 @@ class UserInteractionManager(object):
         self._userInputs = None
         self._user_interaction_provider = user_interaction_provider
         self._app = app
-        logger.debug("Init  UserInteractionManager with app ", str(app))
+        app.logger.debug("Init  UserInteractionManager with app %s", bool(app is not None))
 
     def update(self) -> None:
         self._userInputs = self._getUserInputs()
