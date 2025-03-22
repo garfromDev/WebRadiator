@@ -47,7 +47,6 @@ class DecisionMaker(object):
 
     def make_decision(self) -> str:
         # 0 get meta mode from calendar
-        print("make decision")
         meta_mode: OverMode = self._calendar.getCurrentMode()
         self._userManager.update()
         info = "mode from calendar {} : {} ".format(self._calendar.get_current_calendar(), str(meta_mode))
@@ -87,7 +86,6 @@ class DecisionMaker(object):
             choosen_mode = comfort_mode
         info += f"  Heating mode applied : {choosen_mode}"
         app.logger.info(info)
-        print(info)
         return str(choosen_mode)
 
 

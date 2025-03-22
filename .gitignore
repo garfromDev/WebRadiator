@@ -1,7 +1,7 @@
 *.iml
 .idea/
 *.py[cod]
-
+*.log
 # Environments
 .env
 .venv

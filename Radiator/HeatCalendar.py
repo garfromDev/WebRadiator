@@ -7,10 +7,6 @@
 # note : use https://jsonlint.com/ to validate json structure with usefull
 # warnings
 
-# concept : json file will be update by web server according user interaction
-# this module will check every 15mn the mode indicated by the json and set
-# meta_mode
-
 # =================================================
 # usage of json structure:
 #import json
@@ -20,6 +16,7 @@
 # ==================================================
 import os
 from typing import Optional
+from flask import app
 from app.models import OverMode, CalendarInUse
 from .CST import CST
 from .logger_provider import logger
@@ -57,7 +54,7 @@ class HeatCalendar:
         except Exception as err:
             # soit le fichier n'a pu être lu, soit le calendrier n'est pas
             # complet
-            logger.error(err)
+            app.logger.error(err)
             return OverMode.UNKNOWN
         return OverMode(metaMode.strip().upper())
 
