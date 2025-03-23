@@ -19,7 +19,6 @@ from typing import Optional
 from flask import app
 from app.models import OverMode, CalendarInUse
 from .CST import CST
-from .logger_provider import logger
 import time
 import json
 
