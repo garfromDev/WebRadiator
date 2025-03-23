@@ -46,7 +46,7 @@ class HeatCalendar:
         # ouvrir le fichier
         # Dans un premier temps, le calendrier va juste permettre de sélectionner le bon fichier
         # Dans le futur, le calendrier sera stocké en base
-        cal_file = self._make_file_name(CalendarInUse.current.name) or self._calFile
+        cal_file = CalendarInUse.current and self._make_file_name(CalendarInUse.current.name) or self._calFile
         try:
             with open(os.path.join(os.path.dirname(__file__), cal_file)) as wcal:
                 calendar = json.load(wcal)
