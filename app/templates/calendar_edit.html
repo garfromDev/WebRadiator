@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="calendar-editor">
+    <div class="calendar-header">
+        <h2>Edition du Planning de Chauffage</h2>
+        <div class="mode-legend">
+            <span class="mode-item mode-confort">CONFORT</span>
+            <span class="mode-item mode-eco">ECO</span>
+            <span class="mode-item mode-off">OFF</span>
+        </div>
+    </div>
+
+    <div class="calendar-grid">
+        <!-- En-tête avec les jours -->
+        <div class="time-column">
+            <div class="time-header"></div>
+            {% for hour in range(24) %}
+                <div class="time-slot">{{ "%02d"|format(hour) }}:00</div>
+                <div class="time-slot">{{ "%02d"|format(hour) }}:15</div>
+                <div class="time-slot">{{ "%02d"|format(hour) }}:30</div>
+                <div class="time-slot">{{ "%02d"|format(hour) }}:45</div>
+            {% endfor %}
+        </div>
+
+        <!-- Grille principale -->
+        <div class="days-grid">
+            <div class="days-header">
+                {% for day in ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"] %}
+                    <div class="day-column-header">{{ day }}</div>
+                {% endfor %}
+            </div>
+            <div class="slots-grid">
+                {% for day in range(7) %}
+                    <div class="day-column">
+                        {% for slot in range(96) %}
+                            <div class="time-cell mode-eco" 
+                                 data-day="{{ day }}" 
+                                 data-slot="{{ slot }}"
+                                 title="Cliquer pour changer le mode">
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="calendar-controls">
+        <button class="btn btn-primary" id="validate-button">Valider les changements</button>
+    </div>
+</div>
+
+<!-- On charge le JavaScript à la fin -->
+<script src="{{ url_for('static', filename='js/calendar_edit.js') }}"></script>
+{% endblock %}
