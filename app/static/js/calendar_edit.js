@@ -1,7 +1,27 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Configuration
     const MODES = ['mode-eco', 'mode-confort', 'mode-off'];
-    const gridData = Array(7).fill().map(() => Array(96).fill('mode-eco')); // État initial
+    
+    // Conversion du planning initial en données de grille
+    function convertModeFromBackend(mode) {
+        switch(mode) {
+            case 'ECO': return 'mode-eco';
+            case 'CONFORT': return 'mode-confort';
+            case 'OFF': return 'mode-off';
+            default: return 'mode-eco';
+        }
+    }
+
+    // Initialisation de la grille avec les données existantes
+    const gridData = [
+        initialSchedule.monday,
+        initialSchedule.tuesday,
+        initialSchedule.wednesday,
+        initialSchedule.thursday,
+        initialSchedule.friday,
+        initialSchedule.saturday,
+        initialSchedule.sunday
+    ].map(day => day.map(convertModeFromBackend));
     
     // Sélection des éléments du DOM
     const calendar = document.querySelector('.calendar-grid');
@@ -27,6 +47,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Gestion du clic sur une cellule
     document.querySelectorAll('.time-cell').forEach(cell => {
+        // Initialise la cellule avec le mode sauvegardé
+        const day = parseInt(cell.dataset.day);
+        const slot = parseInt(cell.dataset.slot);
+        updateCell(cell, gridData[day][slot]);
+
+        // Gestion du clic
         cell.addEventListener('click', function() {
             // Trouve le mode actuel
             const currentMode = MODES.find(mode => this.classList.contains(mode));
@@ -101,14 +127,91 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Planning sauvegardé avec succès !');
+                // Crée un toast de succès
+                const toastContainer = document.querySelector('.toast-container');
+                const successToast = document.createElement('div');
+                successToast.className = 'toast align-items-center text-white bg-success border-0';
+                successToast.setAttribute('role', 'alert');
+                successToast.setAttribute('aria-atomic', 'true');
+                successToast.innerHTML = `
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            Planning sauvegardé avec succès
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                `;
+                toastContainer.appendChild(successToast);
+                
+                const toast = new bootstrap.Toast(successToast, {
+                    autohide: true,
+                    delay: 1000
+                });
+                
+                // Supprime le toast du DOM après qu'il soit caché
+                successToast.addEventListener('hidden.bs.toast', function () {
+                    successToast.remove();
+                });
+                
+                toast.show();
+                
+                // Attend que le toast soit affiché avant de rediriger
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1000);
             } else {
-                alert('Erreur lors de la sauvegarde du planning');
+                // En cas d'erreur, on crée un toast d'erreur dynamiquement
+                const toastContainer = document.querySelector('.toast-container');
+                const errorToast = document.createElement('div');
+                errorToast.className = 'toast align-items-center text-white bg-danger border-0';
+                errorToast.setAttribute('role', 'alert');
+                errorToast.setAttribute('aria-atomic', 'true');
+                errorToast.innerHTML = `
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            Erreur : ${data.error || 'Erreur lors de la sauvegarde'}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                `;
+                toastContainer.appendChild(errorToast);
+                const toast = new bootstrap.Toast(errorToast, {
+                    autohide: true,
+                    delay: 3000
+                });
+                toast.show();
+                // Supprime le toast du DOM après qu'il soit caché
+                errorToast.addEventListener('hidden.bs.toast', function () {
+                    errorToast.remove();
+                });
             }
         })
         .catch(error => {
             console.error('Erreur:', error);
-            alert('Erreur lors de la sauvegarde du planning');
+            // Même chose pour les erreurs de réseau
+            const toastContainer = document.querySelector('.toast-container');
+            const errorToast = document.createElement('div');
+            errorToast.className = 'toast align-items-center text-white bg-danger border-0';
+            errorToast.setAttribute('role', 'alert');
+            errorToast.setAttribute('aria-atomic', 'true');
+            errorToast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        Erreur réseau lors de la sauvegarde
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            toastContainer.appendChild(errorToast);
+            const toast = new bootstrap.Toast(errorToast, {
+                autohide: true,
+                delay: 3000
+            });
+            toast.show();
+            // Supprime le toast du DOM après qu'il soit caché
+            errorToast.addEventListener('hidden.bs.toast', function () {
+                errorToast.remove();
+            });
         });
     });
 
