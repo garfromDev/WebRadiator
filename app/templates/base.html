@@ -2,10 +2,22 @@
 
 {% block head %}
     {# Favicon declarations must come before super() to ensure they take precedence #}
+    <!-- Pour Safari et iOS -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.svg') }}">
+    <meta name="apple-mobile-web-app-title" content="Radiateur">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Pour les navigateurs modernes -->
     <link rel="icon" type="image/svg+xml" sizes="any" href="{{ url_for('static', filename='img/favicon.svg') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/favicon.svg') }}">
+    
+    <!-- Pour les navigateurs plus anciens et Safari -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16.png') }}">
+    
+    <!-- Manifest pour PWA -->
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+    <meta name="theme-color" content="#0D6EFD">
     {{ super() }}
 {% endblock %}
 

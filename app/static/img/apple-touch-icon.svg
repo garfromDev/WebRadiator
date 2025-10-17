@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="180px" height="180px" viewBox="0 0 180 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Radiateur</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <!-- Fond rond pour iOS -->
+        <circle fill="#0D6EFD" cx="90" cy="90" r="90"/>
+        <!-- Tuyaux verticaux du radiateur, mis à l'échelle pour 180x180 -->
+        <rect fill="white" x="30" y="45" width="20" height="90" rx="5"/>
+        <rect fill="white" x="65" y="45" width="20" height="90" rx="5"/>
+        <rect fill="white" x="100" y="45" width="20" height="90" rx="5"/>
+        <rect fill="white" x="135" y="45" width="20" height="90" rx="5"/>
+        <!-- Barres horizontales -->
+        <rect fill="white" x="20" y="55" width="140" height="15" rx="5"/>
+        <rect fill="white" x="20" y="110" width="140" height="15" rx="5"/>
+    </g>
+</svg>

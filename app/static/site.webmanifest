@@ -1,0 +1,16 @@
+{
+    "name": "Radiateur",
+    "short_name": "Radiateur",
+    "icons": [
+        {
+            "src": "/static/img/apple-touch-icon.svg",
+            "sizes": "180x180",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ],
+    "theme_color": "#0D6EFD",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "start_url": "/"
+}
