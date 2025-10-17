@@ -3,6 +3,7 @@
 *.py[cod]
 *.log
 .DS_Store
+app.db
 # Environments
 .env
 .venv
