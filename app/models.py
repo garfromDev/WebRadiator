@@ -9,6 +9,13 @@ from typing import TypeVar, Type
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
+class classproperty:
+    def __init__(self, fget):
+        self.fget = fget
+    def __get__(self, obj, owner):
+        return self.fget(owner)
+
+
 class DatedStatus:
     def __init__(self, status: bool = True, expiration_date: Optional[datetime] = None):
         """ Par défaut, les statuts expirent le jour même à minuit et sont actifs """
@@ -116,9 +123,7 @@ class CalendarInUse(db.Model):
             db.session.add(new_cal)
             db.session.commit()
 
-    # Attention, deprecated en 3.11, supprimé en 3.13
-    @classmethod
-    @property
+    @classproperty
     def current(cls: T) -> T:
         return db.session.execute(
             db.select(CalendarInUse).filter_by(in_use=InUse.true)).scalar() or None
