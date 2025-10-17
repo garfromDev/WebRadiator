@@ -7,7 +7,8 @@ flask-login
 flask_bootstrap>=3.3.7.1,<4
 werkzeug<3
 Flask-APScheduler>=1.13.1,<1.14
-pydantic
-RPi.GPIO
+pydantic<2.0
+#rpi-lgpio~=0.2
 Adafruit_GPIO
 Adafruit_MCP3008
+gunicorn
