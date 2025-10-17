@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="180px" height="180px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Radiateur</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#0D6EFD" x="0" y="0" width="32" height="32" rx="4"/>
+        <!-- Tuyaux verticaux du radiateur, plus épais pour meilleure visibilité -->
+        <rect fill="white" x="5" y="6" width="4" height="20" rx="1"/>
+        <rect fill="white" x="12" y="6" width="4" height="20" rx="1"/>
+        <rect fill="white" x="19" y="6" width="4" height="20" rx="1"/>
+        <rect fill="white" x="26" y="6" width="4" height="20" rx="1"/>
+        <!-- Barres horizontales, plus épaisses -->
+        <rect fill="white" x="3" y="8" width="26" height="3" rx="1"/>
+        <rect fill="white" x="3" y="21" width="26" height="3" rx="1"/>
+    </g>
+</svg>

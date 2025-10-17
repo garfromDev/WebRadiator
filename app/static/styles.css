@@ -24,9 +24,96 @@ button[type="submit"] {
   border: none; /* Supprimer la bordure par défaut pour les boutons de type submit */
 }
 
-/* Style pour chaque bouton spécifique */
-button.confort {
-  background-color: #28a745; /* Couleur de fond spécifique pour le bouton Confort */
+/* Style pour le conteneur principal */
+.main-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Style pour les groupes de boutons */
+.mode-buttons,
+.calendar-buttons {
+    display: flex;
+    gap: 12px;
+    margin: 12px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Style pour la section calendrier */
+.calendar-section {
+    margin: 24px 0;
+    width: 100%;
+    text-align: center;
+}
+
+.calendar-section span {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #495057;
+}
+
+/* Styles de base pour tous les boutons */
+.btn {
+    padding: 8px 16px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+/* Style pour les boutons de mode (non actifs) */
+.btn-primary {
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    color: #495057;
+}
+
+.btn-primary:hover {
+    background-color: #dee2e6;
+    border-color: #ced4da;
+    color: #212529;
+}
+
+/* Style pour les boutons de calendrier (non actifs) */
+.btn-secondary {
+    background-color: #f8f9fa;
+    border-color: #e9ecef;
+    color: #495057;
+}
+
+.btn-secondary:hover {
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    color: #212529;
+}
+
+/* Style pour les boutons actifs */
+.btn.active {
+    position: relative;
+    transform: translateY(-2px);
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    background-color: #0d6efd !important;  /* Force la couleur bleue Bootstrap 5 */
+    border-color: #0a58ca !important;
+    color: white !important;
+}
+
+/* Surcharge pour les modes spécifiques */
+.btn-primary.active[href*="heating_mode=eco"] {
+    background-color: #28a745;  /* Vert comme le mode ECO */
+    border-color: #28a745;
+}
+
+.btn-primary.active[href*="heating_mode=confort"],
+.btn-primary.active[href*="heating_mode=minus1"],
+.btn-primary.active[href*="heating_mode=minus2"] {
+    background-color: #dc3545;  /* Rouge comme le mode CONFORT */
+    border-color: #dc3545;
 }
 
 /* Styles pour l'éditeur de calendrier */

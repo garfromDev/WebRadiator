@@ -10,7 +10,14 @@ app.logger.info("loading  routes")
 @app.route('/')
 def main_page():
     form = RadiatorForm()
-    return render_template('index.html', title='Radiator',  form=form)
+    current_calendar = CalendarInUse.current
+    current_interaction = UserInteraction.current()
+    current_mode = current_interaction.overmode_status if current_interaction and current_interaction.overruled_status else None
+    return render_template('index.html', 
+                         title='Radiator',  
+                         form=form, 
+                         current_calendar=current_calendar.name if current_calendar else None,
+                         current_mode=current_mode.value if current_mode else None)
 
 
 @app.route('/mode/<heating_mode>')
