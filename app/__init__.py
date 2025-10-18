@@ -10,6 +10,15 @@ import signal
 from Radiator.HeatMode import test
 
 app = Flask(__name__)
+logger = logging.getLogger('werkzeug') # grabs underlying WSGI logger
+handler = logging.FileHandler('test.log') # creates handler for the log file
+logger.addHandler(handler) #
+bootstrap = Bootstrap(app)
+login = LoginManager(app)
+login.login_view = 'login'  # so flask know how to log users
+app.config.from_object(Config)  # TODO utiliser vraiment config
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)  # pour le suivi des migrations de la base
 
 def handle_sigterm(signum, frame):
     app.logger.info("SIGTERM reçu, nettoyage en cours...")
