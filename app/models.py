@@ -89,6 +89,13 @@ class UserInteraction(db.Model):
     def __repr__(self):
         return self.__dict__.__repr__()
 
+    def is_active(self) -> bool:
+        """ Retourne vrai si une interaction utilisateur est en cours """
+        now = datetime.now()
+        return (self.overruled_status and self.overruled_exp_date >= now) or \
+               (self.userbonus_status and self.userbonus_exp_date >= now) or \
+               (self.userdown_status and self.userdown_exp_date >= now)
+               
     @classmethod
     def current(cls: Type[T]) -> Optional[T]:
         return cls.query.order_by(UserInteraction.id.desc()).first()

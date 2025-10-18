@@ -12,7 +12,7 @@ def main_page():
     form = RadiatorForm()
     current_calendar = CalendarInUse.current
     current_interaction = UserInteraction.current()
-    current_mode = current_interaction.overmode_status if current_interaction and current_interaction.overruled_status else None
+    current_mode = current_interaction.overmode_status if current_interaction and current_interaction.overruled_status and current_interaction.is_active() else None
     return render_template('index.html', 
                          title='Radiator',  
                          form=form, 
