@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 import os
+import re
+import subprocess
 from .logger_provider import logger
 
 test = os.getenv("RADIATOR_TEST_ENVIRONMENT", "").upper() == "TRUE"
+OUT_PLUS_WAVEFORM = 19
+OUT_MINUS_WAVEFORM = 12
 
 if not test:
     import RPi.GPIO as GPIO
 from .Rolling import Rolling
 from .ActionSequencer import Action, ActionSequencer
-from .HeatingStateDisplayer import HeatingStateDisplayer
 
 
 # This module allows to drive pilot wire
@@ -67,7 +70,11 @@ class HeatMode(object):
     # outMinusWaveform :
     # The GPIO output that drive the second OptoTriac (in GPIO.BCM notation)
     # this output supress positive waveform
-    def __init__(self, out_plus_waveform=19, out_minus_waveform=12, state_displayer=HeatingStateDisplayer()):
+    def __init__(self, out_plus_waveform=OUT_PLUS_WAVEFORM,
+                 out_minus_waveform=OUT_MINUS_WAVEFORM, state_displayer=None):
+        if state_displayer is None:
+            from .HeatingStateDisplayer import HeatingStateDisplayer
+            state_displayer = HeatingStateDisplayer()
         self._outPlusWaveform = out_plus_waveform
         self._outMinusWaveform = out_minus_waveform
         self.sequencer = ActionSequencer()
@@ -165,7 +172,31 @@ class HeatMode(object):
 
 
 if __name__ == '__main__':
-    print("testing Heatmode manually")
-    # logging.basicConfig(filename='Radiator.log', level=logging.DEBUG, format='%(asctime)s %(message)s')
-    test = HeatMode()
-# test.setConfortMinus1()
+    if test:
+        raise RuntimeError("La lecture du mode actuel nécessite les GPIO.")
+
+    def read_output_state(pin):
+        output = subprocess.check_output(
+            ["pinctrl", "get", "%d-%d" % (pin, pin)],
+            universal_newlines=True
+        )
+        match = re.match(r"\s*%d:\s+op\b.*\|\s*(hi|lo)\b" % pin, output)
+        if match is None:
+            raise RuntimeError("Impossible de lire l'état de sortie GPIO%d: %s" %
+                               (pin, output.strip()))
+        return GPIO.HIGH if match.group(1) == "hi" else GPIO.LOW
+
+    plus_state = read_output_state(OUT_PLUS_WAVEFORM)
+    minus_state = read_output_state(OUT_MINUS_WAVEFORM)
+
+    if plus_state == GPIO.LOW and minus_state == GPIO.LOW:
+        mode = "Confort"
+    elif plus_state == GPIO.HIGH and minus_state == GPIO.HIGH:
+        mode = "Éco"
+    elif plus_state == GPIO.LOW and minus_state == GPIO.HIGH:
+        mode = "Hors gel"
+    else:
+        mode = "Commande non reconnue"
+
+    print("Mode actuel du chauffage : %s (plus=%s, moins=%s)" %
+          (mode, plus_state, minus_state))
