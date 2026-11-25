@@ -40,3 +40,8 @@ from app.models import UserInteraction
 app.app_context().push()
 query = db.select(UserInteraction)
 usi = db.session.scalars(query).all()
+
+## Vérification de l'état des sorties de commande sur la raspberry
+dans WebRadiator, 
+source ../webradiator/bin/activate
+python -m Radiator.HeatMode
